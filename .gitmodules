@@ -1,0 +1,3 @@
+[submodule "TonNurako"]
+	path = TonNurako
+	url = https://github.com/sazae657/TonNurako.git

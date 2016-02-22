@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motitter", "Motitter\Motitter.csproj", "{6536E29C-DC70-4426-96D7-59F31DFF1836}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TonNurako", "TonNurako", "{F47036E3-A40B-457B-BC52-D955E8ED8DF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TonNurako", "TonNurako\TonNurako.csproj", "{936E32EA-D5CB-41B5-B75A-A282DB26CC1C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6536E29C-DC70-4426-96D7-59F31DFF1836}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6536E29C-DC70-4426-96D7-59F31DFF1836}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6536E29C-DC70-4426-96D7-59F31DFF1836}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6536E29C-DC70-4426-96D7-59F31DFF1836}.Release|Any CPU.Build.0 = Release|Any CPU
+		{936E32EA-D5CB-41B5-B75A-A282DB26CC1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{936E32EA-D5CB-41B5-B75A-A282DB26CC1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{936E32EA-D5CB-41B5-B75A-A282DB26CC1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{936E32EA-D5CB-41B5-B75A-A282DB26CC1C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{936E32EA-D5CB-41B5-B75A-A282DB26CC1C} = {F47036E3-A40B-457B-BC52-D955E8ED8DF7}
+	EndGlobalSection
+EndGlobal
