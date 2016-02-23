@@ -23,7 +23,7 @@ namespace Motitter
         public override void ShellCreated() {
             timelineChildren = new List<IChild>();
 
-            this.Title = "モチッター";
+            this.Title = "ﾓﾁｯﾀー";
             this.Layout.MenuBar = CreateMenu();
 
             var frame = new Form();
@@ -42,12 +42,12 @@ namespace Motitter
             imp.ResizeHeight = true;
             command.Children.Add(imp);
 
-            // チートボタン
+            // ﾁーﾄﾎﾞﾀﾝ
             var btn = new PushButtonGadget();
             btn.LeftAttachment = AttachmentType.Widget;
             btn.RightAttachment = AttachmentType.Form;
             btn.LeftWidget = imp;
-            btn.LabelString = "チート";
+            btn.LabelString = "ﾁーﾄ";
             btn.ActivateEvent +=  (x,y) => {
                 var msg = imp.Value;
                 Status _status =  this.Tokens.Statuses.Update(status => msg);
@@ -84,7 +84,7 @@ namespace Motitter
         }
 
         /// <summary>
-        /// メニュー生成
+        /// ﾒﾆｭー生成
         /// </summary>
         /// <returns></returns>
         IWidget CreateMenu()
@@ -100,7 +100,7 @@ namespace Motitter
 
             var cb1 = new TonNurako.Widgets.Xm.CascadeButton();
             cb1.Name = "CB";
-            cb1.LabelString = "メニュー(M)";
+            cb1.LabelString = "ﾒﾆｭー(M)";
             cb1.Mnemonic = TonNurako.Data.KeySym.FromName("M");
             cb1.SubMenuId = pdm;
             smbar.Children.Add(cb1);
@@ -121,7 +121,7 @@ namespace Motitter
             smbar.Children.Add(helpm);
 
             var helpb = new TonNurako.Widgets.Xm.CascadeButtonGadget();
-            helpb.LabelString = "ヘルプ(H)";
+            helpb.LabelString = "ﾍﾙﾌﾟ(H)";
             helpb.Mnemonic = TonNurako.Data.KeySym.FromName("H");
             helpb.SubMenuId = helpm;
             smbar.Children.Add(helpb);
@@ -136,11 +136,11 @@ namespace Motitter
                          d.Items.Help.Visible = false;
                      };
                      d.WidgetManagedEvent += (x, y) => {
-                        d.SymbolPixmap = TonNurako.GC.Pixmap.FromBuffer(this, Properties.Resources.icon_xpm);                         
+                        d.SymbolPixmap = TonNurako.GC.Pixmap.FromBuffer(this, Properties.Resources.icon_xpm);
                      };
-                     d.DialogTitle = "トンヌラコ";
+                     d.DialogTitle = "ﾄﾝﾇﾗｺ";
                      d.DialogStyle = DialogStyle.ApplicationModal;
-                     d.MessageString = "トンヌラコ";
+                     d.MessageString = "ﾄﾝﾇﾗｺ";
                      d.OkLabelString = "わかった";
 
                      this.Layout.Children.Add(d);
@@ -151,12 +151,12 @@ namespace Motitter
              }))());
             smbar.MenuHelpWidget = helpb;
             return smbar;
-        }       
+        }
 
 
         static readonly int MAX_TIMELINE = 50;
         /// <summary>
-        /// タイムライン生成
+        /// ﾀｲﾑﾗｲﾝ生成
         /// </summary>
         private int AddTimeline(string name, string status, bool append) {
             if (timelineChildren.Count > MAX_TIMELINE) {
@@ -227,7 +227,7 @@ namespace Motitter
             app.Name = "TnkMotitter";
             app.FallbackResource.Add("*fontList", "-misc-fixed-medium-r-normal--14-*-*-*-*-*-*-*:");
             app.FallbackResource.Add("*geometry", "+100+100");
-            app.FallbackResource.Add("*title", "チッター");
+            app.FallbackResource.Add("*title", "ﾁｯﾀー");
 
             TonNurako.Application.Run(app, new Program());
         }
