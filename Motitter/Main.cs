@@ -23,7 +23,7 @@ namespace Motitter
         public override void ShellCreated() {
             timelineChildren = new List<IChild>();
 
-            this.Title = "ﾓﾁｯﾀー";
+            this.Title = "もちったー";
             this.Layout.MenuBar = CreateMenu();
 
             var frame = new Form();
@@ -47,7 +47,7 @@ namespace Motitter
             btn.LeftAttachment = AttachmentType.Widget;
             btn.RightAttachment = AttachmentType.Form;
             btn.LeftWidget = imp;
-            btn.LabelString = "ﾁーﾄ";
+            btn.LabelString = "チート";
             btn.ActivateEvent +=  (x,y) => {
                 var msg = imp.Value;
                 Status _status =  this.Tokens.Statuses.Update(status => msg);
@@ -77,9 +77,10 @@ namespace Motitter
             // ここは自分で入れてね
             Tokens = CoreTweet.Tokens.Create(
                 "<ConsumerKey>", "<ConsumerSecret>", "<AccessToken>", "<AccessSecret>");
+            
             this.RealizedEvent += (x,y) => {
+                this.IconPixmap = TonNurako.GC.Pixmap.FromBuffer(this,  Motitter.Properties.Resources.icon_xpm);                
                 LoadTimeLine();
-                this.IconPixmap = TonNurako.GC.Pixmap.FromBuffer(this,  Motitter.Properties.Resources.icon_xpm);
             };
         }
 
@@ -100,7 +101,7 @@ namespace Motitter
 
             var cb1 = new TonNurako.Widgets.Xm.CascadeButton();
             cb1.Name = "CB";
-            cb1.LabelString = "ﾒﾆｭー(M)";
+            cb1.LabelString = "メニュー(M)";
             cb1.Mnemonic = TonNurako.Data.KeySym.FromName("M");
             cb1.SubMenuId = pdm;
             smbar.Children.Add(cb1);
@@ -121,7 +122,7 @@ namespace Motitter
             smbar.Children.Add(helpm);
 
             var helpb = new TonNurako.Widgets.Xm.CascadeButtonGadget();
-            helpb.LabelString = "ﾍﾙﾌﾟ(H)";
+            helpb.LabelString = "ヘルプ(H)";
             helpb.Mnemonic = TonNurako.Data.KeySym.FromName("H");
             helpb.SubMenuId = helpm;
             smbar.Children.Add(helpb);
@@ -138,9 +139,9 @@ namespace Motitter
                      d.WidgetManagedEvent += (x, y) => {
                         d.SymbolPixmap = TonNurako.GC.Pixmap.FromBuffer(this, Properties.Resources.icon_xpm);
                      };
-                     d.DialogTitle = "ﾄﾝﾇﾗｺ";
+                     d.DialogTitle = "トンヌラコ";
                      d.DialogStyle = DialogStyle.ApplicationModal;
-                     d.MessageString = "ﾄﾝﾇﾗｺ";
+                     d.MessageString = "トンヌラコ";
                      d.OkLabelString = "わかった";
 
                      this.Layout.Children.Add(d);
@@ -181,7 +182,7 @@ namespace Motitter
             label.ResizeHeight = true;
             label.LeftAttachment = AttachmentType.Form;
             label.RightAttachment = AttachmentType.Form;
-            label.Value = "[" + name + "]\n" + status;
+            label.Value = $"[{name}]\n{status}";
 
             rc.Children.Add(label);
             rc.Children.Add(new SeparatorGadget());
@@ -203,12 +204,30 @@ namespace Motitter
             if(0 != timelineView.Children.Count()) {
                 timelineView.DestroyChildren();
             }
-
-            foreach (var status in this.Tokens.Statuses.HomeTimeline(count => 2)) {
-                AddTimeline(status.User.ScreenName, status.Text, true);
+            try {
+                foreach (var status in this.Tokens.Statuses.HomeTimeline(count => 2)) {
+                    AddTimeline(status.User.ScreenName, status.Text, true);
+                }
+            }catch(Exception e) {
+                var d = new ErrorDialog();
+                d.WidgetCreatedEvent += (x, y) => {
+                    d.Items.Cancel.Visible = false;
+                    d.Items.Help.Visible = false;
+                };
+                d.DialogTitle = "エラー";
+                d.DialogStyle = DialogStyle.ApplicationModal;
+                d.MessageString = $"{e.GetType()}\n{e.Message}";
+                d.AutoUnmanage = false;
+                d.OkLabelString = "わかった";
+                d.OkEvent += (w, p) => {
+                    this.Destroy();                    
+                };
+                this.Layout.Children.Add(d);
+                d.Visible = true;                
+                return;
             }
 
-           new Task(()=> {
+           Task.Run(()=> {
                 foreach(var m in Tokens.Streaming.User()
                             .OfType<StatusMessage>()
                             .Select(x => x.Status)
@@ -217,7 +236,7 @@ namespace Motitter
                         AddTimeline(m.User.ScreenName, m.Text, false);
                     });
                 }
-            }).Start();
+            });
 
         }
 
@@ -228,8 +247,10 @@ namespace Motitter
             app.FallbackResource.Add("*fontList", "-misc-fixed-medium-r-normal--14-*-*-*-*-*-*-*:");
             app.FallbackResource.Add("*geometry", "+100+100");
             app.FallbackResource.Add("*title", "ﾁｯﾀー");
-
-            TonNurako.Application.Run(app, new Program());
+            var shell = new Program();
+            shell.Name = "Motitter";
+            
+            TonNurako.Application.Run(app, shell);
         }
     }
 }
