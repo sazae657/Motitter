@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CoreTweet;
@@ -18,11 +19,12 @@ namespace Motitter
         CoreTweet.Tokens Tokens {
             get; set;
         }
+
         public override void ShellCreated() {
             timelineChildren = new List<IChild>();
 
             this.Title = "モチッター";
-            this.IconPixmap = TonNurako.GC.Pixmap.FromBuffer(this,  Motitter.Properties.Resources.icon_xpm);
+            this.Layout.MenuBar = CreateMenu();
 
             var frame = new Form();
             frame.Width = 320;
@@ -75,21 +77,94 @@ namespace Motitter
             // ここは自分で入れてね
             Tokens = CoreTweet.Tokens.Create(
                 "<ConsumerKey>", "<ConsumerSecret>", "<AccessToken>", "<AccessSecret>");
-
             this.RealizedEvent += (x,y) => {
                 LoadTimeLine();
+                this.IconPixmap = TonNurako.GC.Pixmap.FromBuffer(this,  Motitter.Properties.Resources.icon_xpm);
             };
         }
 
-        static readonly int MAX_TIMELINE = 50;
+        /// <summary>
+        /// メニュー生成
+        /// </summary>
+        /// <returns></returns>
+        IWidget CreateMenu()
+        {
+            TonNurako.Widgets.Xm.MenuBar smbar;
+            smbar = new TonNurako.Widgets.Xm.MenuBar();
+            this.Layout.Children.Add(smbar);
 
+            // PDM
+            var pdm = new TonNurako.Widgets.Xm.PulldownMenu();
+            pdm.Name = "PDM";
+            smbar.Children.Add(pdm);
+
+            var cb1 = new TonNurako.Widgets.Xm.CascadeButton();
+            cb1.Name = "CB";
+            cb1.LabelString = "メニュー(M)";
+            cb1.Mnemonic = TonNurako.Data.KeySym.FromName("M");
+            cb1.SubMenuId = pdm;
+            smbar.Children.Add(cb1);
+
+            pdm.Children.Add(
+             ((Func<PushButtonGadget>)(() => {
+                 var t = new PushButtonGadget();
+                 t.LabelString = "終了";
+                 t.ActivateEvent += (X, Y) => {
+                    this.Destroy();
+                 };
+                 return t;
+             }))());
+
+            // help
+            var helpm = new TonNurako.Widgets.Xm.PulldownMenu();
+            helpm.Name = "HELP";
+            smbar.Children.Add(helpm);
+
+            var helpb = new TonNurako.Widgets.Xm.CascadeButtonGadget();
+            helpb.LabelString = "ヘルプ(H)";
+            helpb.Mnemonic = TonNurako.Data.KeySym.FromName("H");
+            helpb.SubMenuId = helpm;
+            smbar.Children.Add(helpb);
+            helpm.Children.Add(
+             ((Func<PushButtonGadget>)(() => {
+                 var t = new PushButtonGadget();
+                 t.LabelString = "これについて";
+                 t.ActivateEvent += (X, Y) => {
+                     var d = new InformationDialog();
+                     d.WidgetCreatedEvent += (x, y) => {
+                         d.Items.Cancel.Visible = false;
+                         d.Items.Help.Visible = false;
+                     };
+                     d.WidgetManagedEvent += (x, y) => {
+                        d.SymbolPixmap = TonNurako.GC.Pixmap.FromBuffer(this, Properties.Resources.icon_xpm);                         
+                     };
+                     d.DialogTitle = "トンヌラコ";
+                     d.DialogStyle = DialogStyle.ApplicationModal;
+                     d.MessageString = "トンヌラコ";
+                     d.OkLabelString = "わかった";
+
+                     this.Layout.Children.Add(d);
+                     d.Visible = true;
+
+                 };
+                 return t;
+             }))());
+            smbar.MenuHelpWidget = helpb;
+            return smbar;
+        }       
+
+
+        static readonly int MAX_TIMELINE = 50;
+        /// <summary>
+        /// タイムライン生成
+        /// </summary>
         private int AddTimeline(string name, string status, bool append) {
             if (timelineChildren.Count > MAX_TIMELINE) {
                 var count = timelineChildren.Count - MAX_TIMELINE;
                 foreach (var item in timelineChildren.GetRange(MAX_TIMELINE, count)) {
                     item.Destroy();
                 }
-                timelineChildren.RemoveRange(5, count);
+                timelineChildren.RemoveRange(MAX_TIMELINE, count);
             }
 
             var rc = new RowColumn();
