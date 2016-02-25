@@ -79,8 +79,8 @@ namespace Motitter
                 "<ConsumerKey>", "<ConsumerSecret>", "<AccessToken>", "<AccessSecret>");
             
             this.RealizedEvent += (x,y) => {
-                this.IconPixmap = TonNurako.GC.Pixmap.FromBuffer(this,  Motitter.Properties.Resources.icon_xpm);                
                 LoadTimeLine();
+                this.IconPixmap = TonNurako.GC.Pixmap.FromBuffer(this,  Motitter.Properties.Resources.icon_xpm);                
             };
         }
 
